@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 /**
  * In this class, you will complete the code necessary to retrieve and manipulate entities related to the Student
  * entity. You can check out the ClassroomService to see how this is done for another entity. You should also review
@@ -58,7 +60,9 @@ public class StudentService {
      * @param classroom a persisted, existing classroom passed into this method
      */
     public void assignClassroomToStudent(long studentId, Classroom classroom){
-
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException());
+         student.setClassroom(classroom);
+        studentRepository.save(student);
     }
 
     /**
@@ -68,7 +72,9 @@ public class StudentService {
      * @return the Classroom of the student
      */
     public Classroom getClassroomOfStudent(long studentId){
-        return null;
+   Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException());
+   
+        return student.getClassroom();
     }
 
     /**
@@ -78,6 +84,9 @@ public class StudentService {
      * @param studentId Id of a persisted, existing student entity
      */
     public void unassignClassroomOfStudent(long studentId){
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException());
+        student.setClassroom(null);
+        studentRepository.save(student);
 
     }
 }
